@@ -1,2 +1,3 @@
 db/evidence.db
 data/evidence.json
+.env
