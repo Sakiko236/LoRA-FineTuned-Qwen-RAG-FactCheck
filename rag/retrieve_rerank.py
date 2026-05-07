@@ -57,12 +57,12 @@ if __name__ == "__main__":
     test_claim = "The Earth's climate sensitivity is so low that a doubling of atmospheric CO2 will result in a surface temperature change on the order of 1°C or less."
     
     print(f"\nProcessing Claim: '{test_claim}'\n")
-    top_3_evidence = pipeline.process_claim(test_claim, top_k_retrieve=10, top_k_rerank=3)
+    top_5_evidence = pipeline.process_claim(test_claim, top_k_retrieve=20, top_k_rerank=5)
     
     print("="*40)
-    print("Top 3 Evidence:")
+    print("Top 5 Evidence:")
     print("="*40)
-    for rank, ev in enumerate(top_3_evidence, 1):
+    for rank, ev in enumerate(top_5_evidence, 1):
         print(f"Rank {rank}")
         print(f"Evidence ID : {ev['id']}")
         print(f"Score       : {ev['rerank_score']:.4f}")
