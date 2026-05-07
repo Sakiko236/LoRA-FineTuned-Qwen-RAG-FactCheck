@@ -1,0 +1,92 @@
+import os
+import sys
+import json
+import re
+from tqdm import tqdm
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from infer.inference import ClaimVerifier
+from rag.retrieve_rerank import RAGPipeline
+
+def extract_label(text):
+    text_upper = text.upper()
+    matches = re.finditer(r'\b(SUPPORTS|REFUTES|NOT_ENOUGH_INFO|DISPUTED)\b', text_upper)
+    found_labels = [m.group(0) for m in matches]
+    
+    if found_labels:
+        return found_labels[-1]
+    else:
+        return "NOT_ENOUGH_INFO" 
+
+def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, output_filepath, batch_size=3):
+    print("Initializing ClaimVerifier (Model & LoRA)...")
+    verifier = ClaimVerifier(base_model_id=base_model_id, lora_path=lora_path)
+    
+    print("Initializing RAG Pipeline (Retriever & Re-ranker)...")
+    rag = RAGPipeline()
+    
+    print(f"Loading Unlabelled Test Set from {test_file_path}...")
+    with open(test_file_path, 'r', encoding='utf-8') as f:
+        test_data = json.load(f)
+        
+    output_data = {}
+    
+    items = list(test_data.items())
+    total_claims = len(items)
+    
+    print(f"Starting Prediction on {total_claims} claims (Batch Size: {batch_size})...")
+    
+    for i in tqdm(range(0, total_claims, batch_size), desc="Predicting Batches"):
+        batch_items = items[i:i + batch_size]
+        
+        batch_claim_ids = []
+        batch_claim_texts = []
+        batch_evidence_ids = []
+        
+        for claim_id, claim_info in batch_items:
+            claim_text = claim_info.get('claim_text', '')
+            
+            top_evidence = rag.process_claim(claim_text, top_k_retrieve=20, top_k_rerank=5)
+            evidence_ids = [ev['id'] for ev in top_evidence]
+            
+            batch_claim_ids.append(claim_id)
+            batch_claim_texts.append(claim_text)
+            batch_evidence_ids.append(evidence_ids)
+            
+        model_outputs = verifier.predict(batch_claim_texts, batch_evidence_ids, few_shot=False)
+
+
+        for claim_id, claim_text, ev_ids, model_output in zip(batch_claim_ids, batch_claim_texts, batch_evidence_ids, model_outputs):
+            predicted_label = extract_label(model_output)
+            
+            output_data[claim_id] = {
+                "claim_text": claim_text,
+                "claim_label": predicted_label,
+                "evidences": ev_ids
+            }
+            
+    print(f"\nSaving predictions to {output_filepath}...")
+    
+    output_dir = os.path.dirname(output_filepath)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        
+    with open(output_filepath, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=4, ensure_ascii=False)
+        
+    print(f"✅ All Done! Results saved to {output_filepath}.")
+
+if __name__ == "__main__":
+    BASE_MODEL = "Qwen/Qwen3.5-2B"
+    LORA_PATH = "model/qwen-cot-lora-final"
+    TEST_FILE = "data/test-claims-unlabelled.json"
+    OUTPUT_FILE = "infer/results/test-output.json" 
+    
+    generate_test_predictions_batched(
+        base_model_id=BASE_MODEL,
+        lora_path=LORA_PATH,
+        test_file_path=TEST_FILE,
+        output_filepath=OUTPUT_FILE,
+        batch_size=3
+    )
