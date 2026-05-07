@@ -64,7 +64,8 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id,
     quantization_config=bnb_config,
     device_map="auto",
-    torch_dtype=torch.bfloat16
+    torch_dtype=torch.bfloat16,
+    attn_implementation="sdpa"
 )
 
 print("Applying LoRA...")
@@ -82,11 +83,11 @@ lora_config = LoraConfig(
 print("Starting Training...")
 training_args = SFTConfig(
     output_dir="model/qwen-cot-lora",
-    per_device_train_batch_size=2,      
-    gradient_accumulation_steps=4,      
+    per_device_train_batch_size=1,      
+    gradient_accumulation_steps=8,      
     learning_rate=2e-4,
     logging_steps=10,
-    num_train_epochs=3,                 
+    num_train_epochs=1,                 
     save_strategy="epoch",
     fp16=False,
     bf16=True,
