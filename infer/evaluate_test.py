@@ -37,7 +37,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
     
     print(f"Starting Prediction on {total_claims} claims (Batch Size: {batch_size})...")
     
-    for i in tqdm(range(0, total_claims, batch_size), desc="Predicting Batches"):
+    for i in tqdm(range(0, total_claims, batch_size), desc="Predicting Batches", colour="green"):
         batch_items = items[i:i + batch_size]
         
         batch_claim_ids = []
@@ -47,7 +47,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
         for claim_id, claim_info in batch_items:
             claim_text = claim_info.get('claim_text', '')
             
-            top_evidence = rag.process_claim(claim_text, top_k_retrieve=20, top_k_rerank=5)
+            top_evidence = rag.process_claim(claim_text, top_k_retrieve=20)
             evidence_ids = [ev['id'] for ev in top_evidence]
             
             batch_claim_ids.append(claim_id)
@@ -88,5 +88,5 @@ if __name__ == "__main__":
         lora_path=LORA_PATH,
         test_file_path=TEST_FILE,
         output_filepath=OUTPUT_FILE,
-        batch_size=3
+        batch_size=6
     )

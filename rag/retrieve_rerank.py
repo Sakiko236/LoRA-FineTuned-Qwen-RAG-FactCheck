@@ -2,6 +2,7 @@ import sqlite3
 import json
 import numpy as np
 import faiss
+
 from sentence_transformers import SentenceTransformer, CrossEncoder
 
 DB_PATH = 'db/evidence.db'
@@ -28,7 +29,7 @@ class RAGPipeline:
         result = cursor.fetchone()
         return result[0] if result else ""
 
-    def process_claim(self, claim_text, top_k_retrieve=10, top_k_rerank=3):
+    def process_claim(self, claim_text, top_k_retrieve=20, threshold=2.5):
         claim_embedding = self.bi_encoder.encode([claim_text], convert_to_numpy=True, normalize_embeddings=True)
         distances, indices = self.index.search(claim_embedding, top_k_retrieve)
 
@@ -45,24 +46,29 @@ class RAGPipeline:
         cross_scores = self.cross_encoder.predict(cross_inp)
 
         for i in range(len(retrieved_docs)):
-            retrieved_docs[i]["rerank_score"] = cross_scores[i]
+            retrieved_docs[i]["rerank_score"] = float(cross_scores[i])
 
         reranked_docs = sorted(retrieved_docs, key=lambda x: x["rerank_score"], reverse=True)
 
-        return reranked_docs[:top_k_rerank]
+        final_docs = [doc for doc in reranked_docs if doc["rerank_score"] >= threshold]
+
+        if not final_docs and reranked_docs:
+            final_docs = [reranked_docs[0]]
+
+        return final_docs
 
 if __name__ == "__main__":
     pipeline = RAGPipeline()
     
-    test_claim = "The Earth's climate sensitivity is so low that a doubling of atmospheric CO2 will result in a surface temperature change on the order of 1°C or less."
+    test_claim = "This means that the world is now 1C warmer than it was in pre-industrial times"
     
     print(f"\nProcessing Claim: '{test_claim}'\n")
-    top_5_evidence = pipeline.process_claim(test_claim, top_k_retrieve=20, top_k_rerank=5)
+    evidences = pipeline.process_claim(test_claim, top_k_retrieve=20)
     
     print("="*40)
-    print("Top 5 Evidence:")
+    print("Evidences:")
     print("="*40)
-    for rank, ev in enumerate(top_5_evidence, 1):
+    for rank, ev in enumerate(evidences, 1):
         print(f"Rank {rank}")
         print(f"Evidence ID : {ev['id']}")
         print(f"Score       : {ev['rerank_score']:.4f}")

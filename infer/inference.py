@@ -64,7 +64,7 @@ class ClaimVerifier:
                 
         return "\n".join(evidence_texts)
 
-def predict(self, claims_texts, batch_evidence_ids, few_shot=False):
+    def predict(self, claims_texts, batch_evidence_ids, few_shot=False):
         self.tokenizer.padding_side = 'left'
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -157,8 +157,8 @@ if __name__ == "__main__":
     test_claim_1 = "[South Australia] has the most expensive electricity in the world."
     test_evidences_1 = ["evidence-67732", "evidence-572512"]
     print("\n>>> TEST CASE 1: With Evidence IDs <<<")
-    verifier.predict(test_claim_1, evidence_ids=test_evidences_1)
+    verifier.predict(test_claim_1, batch_evidence_ids=test_evidences_1)
     
     test_claim_2 = "Higher CO2 concentrations actually help ecosystems support more plant and animal life by increasing plant growth speed."
     print("\n>>> TEST CASE 2: No Evidence IDs (Trigger RAG) <<<")
-    verifier.predict(test_claim_2, evidence_ids=None)
+    verifier.predict(test_claim_2, batch_evidence_ids=None)
