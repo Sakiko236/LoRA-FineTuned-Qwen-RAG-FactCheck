@@ -29,7 +29,7 @@ class RAGPipeline:
         result = cursor.fetchone()
         return result[0] if result else ""
 
-    def process_claim(self, claim_text, top_k_retrieve=20, threshold=2.5):
+    def process_claim(self, claim_text, top_k_retrieve=30, threshold=2.0, max_results=5):
         claim_embedding = self.bi_encoder.encode([claim_text], convert_to_numpy=True, normalize_embeddings=True)
         distances, indices = self.index.search(claim_embedding, top_k_retrieve)
 
@@ -55,22 +55,4 @@ class RAGPipeline:
         if not final_docs and reranked_docs:
             final_docs = [reranked_docs[0]]
 
-        return final_docs
-
-if __name__ == "__main__":
-    pipeline = RAGPipeline()
-    
-    test_claim = "This means that the world is now 1C warmer than it was in pre-industrial times"
-    
-    print(f"\nProcessing Claim: '{test_claim}'\n")
-    evidences = pipeline.process_claim(test_claim, top_k_retrieve=20)
-    
-    print("="*40)
-    print("Evidences:")
-    print("="*40)
-    for rank, ev in enumerate(evidences, 1):
-        print(f"Rank {rank}")
-        print(f"Evidence ID : {ev['id']}")
-        print(f"Score       : {ev['rerank_score']:.4f}")
-        print(f"Text        : {ev['text']}\n")
-        print("-" * 40) 
+        return final_docs[:max_results]

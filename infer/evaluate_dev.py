@@ -126,15 +126,15 @@ if __name__ == "__main__":
     DEV_FILE = "data/dev-claims.json"
     OUTPUT_DIR = "infer/results"
     
-    BATCH_SIZE = 2
+    BATCH_SIZE = 6
     
-    # evaluate_dev_set(
-    #     base_model_id=BASE_MODEL,
-    #     lora_path=LORA_PATH,
-    #     dev_file_path=DEV_FILE,
-    #     output_dir=OUTPUT_DIR,
-    #     batch_size=BATCH_SIZE
-    # )
+    evaluate_dev_set(
+        base_model_id=BASE_MODEL,
+        lora_path=LORA_PATH,
+        dev_file_path=DEV_FILE,
+        output_dir=OUTPUT_DIR,
+        batch_size=BATCH_SIZE
+    )
 
     evaluate_dev_set(
         base_model_id=BASE_MODEL,
