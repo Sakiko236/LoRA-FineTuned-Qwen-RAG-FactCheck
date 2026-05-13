@@ -1,9 +1,8 @@
-db/evidence.db
+data/evidence.db
 .env
 *.pyc
 data/faiss_index.bin
 data/faiss_metadata.json
 model/
-db/cot.db
 data/evidence.json
 
