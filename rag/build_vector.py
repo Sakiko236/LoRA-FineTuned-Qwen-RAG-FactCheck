@@ -5,13 +5,15 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
-DB_PATH = 'db/evidence.db'
+DB_PATH = 'data/evidence.db' 
 INDEX_PATH = 'data/faiss_index.bin'
 META_PATH = 'data/faiss_metadata.json'
-MODEL_NAME = 'all-MiniLM-L6-v2'
-BATCH_SIZE = 256
+
+MODEL_NAME = 'BAAI/bge-base-en-v1.5'
+BATCH_SIZE = 512
 
 def main():
+    print(f"Loading Bi-Encoder model: {MODEL_NAME}...")
     model = SentenceTransformer(MODEL_NAME)
 
     conn = sqlite3.connect(DB_PATH)
@@ -23,7 +25,7 @@ def main():
     ids = [row[0] for row in rows]
     texts = [row[1] for row in rows]
 
-    print(f"Loaded {len(texts)} data, start to vectorize...")
+    print(f"Loaded {len(texts)} documents, starting vectorization...")
 
     embeddings = []
     for i in tqdm(range(0, len(texts), BATCH_SIZE)):
@@ -41,7 +43,7 @@ def main():
     with open(META_PATH, 'w', encoding='utf-8') as f:
         json.dump({'ids': ids}, f)
 
-    print("Vectorize complete!")
+    print("Vectorization complete!")
     conn.close()
 
 if __name__ == "__main__":
