@@ -5,3 +5,6 @@ data/evidence.json
 data/faiss_index.bin
 data/faiss_metadata.json
 model/
+db/cot.db
+notebook/
+
