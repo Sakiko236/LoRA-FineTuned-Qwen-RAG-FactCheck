@@ -147,18 +147,3 @@ class ClaimVerifier:
             clean_responses.append(clean_response.strip())
 
         return clean_responses
-
-if __name__ == "__main__":
-    BASE_MODEL = "Qwen/Qwen3.5-4B"
-    LORA_PATH = "model/qwen-cot-lora-final"
-    
-    verifier = ClaimVerifier(base_model_id=BASE_MODEL, lora_path=None)
-    
-    test_claim_1 = "[South Australia] has the most expensive electricity in the world."
-    test_evidences_1 = ["evidence-67732", "evidence-572512"]
-    print("\n>>> TEST CASE 1: With Evidence IDs <<<")
-    verifier.predict(test_claim_1, batch_evidence_ids=test_evidences_1)
-    
-    test_claim_2 = "Higher CO2 concentrations actually help ecosystems support more plant and animal life by increasing plant growth speed."
-    print("\n>>> TEST CASE 2: No Evidence IDs (Trigger RAG) <<<")
-    verifier.predict(test_claim_2, batch_evidence_ids=None)

@@ -9,7 +9,7 @@ def patched_read_text(self, encoding=None, errors=None):
 pathlib.Path.read_text = patched_read_text
 os.environ["PYTHONUTF8"] = "1"
 
-import sqlite3
+import json
 import pandas as pd
 import torch
 from datasets import Dataset
@@ -23,12 +23,11 @@ from transformers import (
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 
-print("Loading data from database...")
-conn = sqlite3.connect('db/cot.db')
+print("Loading data from JSON...")
+with open('data/cot.json', 'r', encoding='utf-8') as f:
+    cot_data = json.load(f)
 
-query = "SELECT * FROM reasoning_data" 
-df = pd.read_sql_query(query, conn)
-conn.close()
+df = pd.DataFrame(list(cot_data.values()))
 
 print("Formatting data into ChatML...")
 
@@ -83,8 +82,8 @@ lora_config = LoraConfig(
 print("Starting Training...")
 training_args = SFTConfig(
     output_dir="model/qwen-cot-lora",
-    per_device_train_batch_size=1,      
-    gradient_accumulation_steps=8,      
+    per_device_train_batch_size=2,      
+    gradient_accumulation_steps=4,      
     learning_rate=2e-4,
     logging_steps=10,
     num_train_epochs=1,                 

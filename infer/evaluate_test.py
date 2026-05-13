@@ -88,5 +88,5 @@ if __name__ == "__main__":
         lora_path=LORA_PATH,
         test_file_path=TEST_FILE,
         output_filepath=OUTPUT_FILE,
-        batch_size=6
+        batch_size=12
     )

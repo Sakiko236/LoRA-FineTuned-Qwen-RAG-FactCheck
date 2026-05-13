@@ -5,7 +5,7 @@ import faiss
 
 from sentence_transformers import SentenceTransformer, CrossEncoder
 
-DB_PATH = 'db/evidence.db'
+DB_PATH = 'data/evidence.db'
 INDEX_PATH = 'data/faiss_index.bin'
 META_PATH = 'data/faiss_metadata.json'
 BI_ENCODER_NAME = 'all-MiniLM-L6-v2'
