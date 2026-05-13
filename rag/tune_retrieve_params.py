@@ -8,9 +8,9 @@ DATA_PATH = Path("data/dev-claims.json")
 
 # Search best parameters for evidence retrieval
 PARAM_GRID = {
-    "top_k_retrieve": [10, 20, 30],
-    "threshold":      [1.0, 2.0, 2.5, 3.0, 4.0],
-    "max_results":    [1, 3, 5, 8],
+    "top_k_retrieve": [20, 30, 50],
+    "threshold":      [0.0, 1.0, 2.0, 3.0, 4.0],
+    "max_results":    [2, 3, 5, 8],
 }
 
 def compute_f1(retrieved_ids: list[str], gold_ids: list[str]) -> tuple[float, float, float]:
@@ -44,7 +44,8 @@ def evaluate(pipeline, claims: dict, top_k_retrieve: int, threshold: float, max_
 
         docs = pipeline.process_claim(
             claim_text,
-            top_k_retrieve=top_k_retrieve,
+            top_k_dense=top_k_retrieve,
+            top_k_sparse=top_k_retrieve//2,
             threshold=threshold,
             max_results=max_results,
         )
