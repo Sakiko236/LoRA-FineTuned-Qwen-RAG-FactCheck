@@ -60,7 +60,7 @@ def evaluate_dev_set(base_model_id, lora_path, dev_file_path, output_dir, batch_
         
         batch_model_outputs = verifier.predict(
             batch_claim_texts, 
-            evidence_ids=batch_evidences, 
+            batch_evidence_ids=batch_evidences, 
             few_shot=True if lora_path is None else False
         )
 

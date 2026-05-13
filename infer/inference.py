@@ -58,7 +58,7 @@ class ClaimVerifier:
             if self.rag_pipeline is None:
                 self.rag_pipeline = RAGPipeline()
             
-            top_evidence = self.rag_pipeline.process_claim(claim_text, top_k_retrieve=20, top_k_rerank=5)
+            top_evidence = self.rag_pipeline.process_claim(claim_text, top_k_retrieve=20)
             for ev in top_evidence:
                 evidence_texts.append(f"[{ev['id']}] {ev['text']}")
                 
@@ -149,10 +149,10 @@ class ClaimVerifier:
         return clean_responses
 
 if __name__ == "__main__":
-    BASE_MODEL = "Qwen/Qwen3.5-2B"
+    BASE_MODEL = "Qwen/Qwen3.5-4B"
     LORA_PATH = "model/qwen-cot-lora-final"
     
-    verifier = ClaimVerifier(base_model_id=BASE_MODEL, lora_path=LORA_PATH)
+    verifier = ClaimVerifier(base_model_id=BASE_MODEL, lora_path=None)
     
     test_claim_1 = "[South Australia] has the most expensive electricity in the world."
     test_evidences_1 = ["evidence-67732", "evidence-572512"]
