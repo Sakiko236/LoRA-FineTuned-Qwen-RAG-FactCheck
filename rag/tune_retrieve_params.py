@@ -8,9 +8,8 @@ DATA_PATH = Path("data/dev-claims.json")
 
 # Search best parameters for evidence retrieval
 PARAM_GRID = {
-    "top_k_retrieve": [10, 20, 30, 50, 100],
-    "threshold":      [-0.4, -0.2,0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
-    "max_results":    [3, 4, 5, 6, 7, 8],
+    "top_k_retrieve": [200],
+    "threshold":      [1.5, 2.0, 2.5, 3],
 }
 
 def compute_f1(retrieved_ids: list[str], gold_ids: list[str]) -> tuple[float, float, float]:
@@ -35,7 +34,7 @@ def compute_f1(retrieved_ids: list[str], gold_ids: list[str]) -> tuple[float, fl
     return precision, recall, f1
 
 
-def evaluate(pipeline, claims: dict, top_k_retrieve: int, threshold: float, max_results: int) -> dict:
+def evaluate(pipeline, claims: dict, top_k_retrieve: int, threshold: float) -> dict:
     precisions, recalls, f1s = [], [], []
 
     for claim_id, claim_data in claims.items():
@@ -46,7 +45,6 @@ def evaluate(pipeline, claims: dict, top_k_retrieve: int, threshold: float, max_
             claim_text,
             top_k_retrieve=top_k_retrieve,
             threshold=threshold,
-            max_results=max_results,
         )
         retrieved_ids = [doc["id"] for doc in docs]
 
@@ -97,7 +95,7 @@ def main():
         params = dict(zip(param_names, combo))
         print(
             f"[{i:>3}/{total}] top_k={params['top_k_retrieve']:>3}  "
-            f"threshold={params['threshold']:.1f}  max_results={params['max_results']:>2}  ",
+            f"threshold={params['threshold']:.2f}  ",
             end="",
             flush=True,
         )
@@ -107,7 +105,6 @@ def main():
             claims,
             top_k_retrieve=params["top_k_retrieve"],
             threshold=params["threshold"],
-            max_results=params["max_results"],
         )
 
         f1 = metrics["macro_f1"]
@@ -132,23 +129,6 @@ def main():
     print(f"  Macro-Recall    = {best_metrics['macro_recall']:.4f}")
     print(f"  Macro-F1        = {best_metrics['macro_f1']:.4f}")
     print("=" * 70)
-
-    # Saving all results to JSON
-    out_path = Path("tune_results.json")
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "best_params":  best_params,
-                "best_metrics": best_metrics,
-                "all_results":  sorted(results, key=lambda x: x["macro_f1"], reverse=True),
-            },
-            f,
-            indent=2,
-            ensure_ascii=False,
-        )
-    print(f"\n[INFO] all results saved to: {out_path}")
-
 
 if __name__ == "__main__":
     main()
