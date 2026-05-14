@@ -48,7 +48,6 @@ class ClaimVerifier:
         evidence_texts = []
         
         if evidence_ids and len(evidence_ids) > 0:
-            print(f"Using provided evidence IDs: {evidence_ids}")
             for eid in evidence_ids:
                 text = get_evidence_text(eid)
                 if text:
@@ -78,21 +77,8 @@ class ClaimVerifier:
                 messages = [
                     {"role": "system", "content": """You are a climate science fact-checker. Your task is to explain the logical connection between the Evidence and the Claim to justify the Label. Use the format: "Let's analyze step by step: [Reasoning] Therefore, the conclusion is: [Label]." conclude your response with one of the following four labels: 
                     [SUPPORTS, REFUTES, NOT_ENOUGH_INFO, DISPUTED]. Here are some examples:
-                    Evidence: 1. CO2 can be toxic to animals at 10,000 ppm. 2. Plants grow faster at 1,000 ppm CO2. 3. Higher CO2 affects plant growth favorably.
-                    Claim: Higher CO2 concentrations actually help ecosystems support more plant and animal life.
-                    Label: DISPUTED
-                    Let's analyze step by step: The evidence confirms that CO2 promotes plant growth, which supports part of the claim. However, it also notes that extremely high concentrations are toxic to animal life. Since the claim makes a broad positive statement without accounting for these toxic thresholds, the claim is partially accurate but also potentially dangerous/misleading.
-                    Therefore, the conclusion is: DISPUTED.
-
-                    Evidence: 1. Human activity and GHG emissions are key factors in global temperature increases. 2. Warming is driven by human-caused thermal expansion and melting ice.
-                    Claim: El Niño drove record highs in global temperatures suggesting rise may not be down to man-made emissions.
-                    Label: REFUTES
-                    Let's analyze step by step: While El Niño is a natural driver of temperature, the evidence explicitly states that human activity is the "key factor" in the pace of current temperature increases. The claim attempts to dismiss man-made emissions by pointing to a natural cause, which contradicts the "substantial evidence" mentioned in the text regarding human-caused warming.
-                    Therefore, the conclusion is: REFUTES.
-
                     Evidence: 1. Reversals in polarity occurred around 1925, 1947, and 1977. 2. The PDO changed to a "cool" phase in a regime shift similar to the 1970s.
                     Claim: In 1946, PDO switched to a cool phase.
-                    Label: SUPPORTS
                     Let's analyze step by step: The evidence mentions a major PDO reversal occurring around 1947 and explicitly describes a shift to a "cool" phase. The year 1946 is immediately adjacent to the 1947 reversal date cited. Given the context of regime shifts, the evidence provides sufficient support for the timing and nature of the phase change described in the claim.
                     Therefore, the conclusion is: SUPPORTS."""},
                     {"role": "user", "content": f"Evidence:\n{combined_evidence}\n\nClaim:\n{claim_text}"}
@@ -117,8 +103,6 @@ class ClaimVerifier:
             truncation=True, 
             max_length=2048
         ).to(self.model.device)
-
-        print(f"Generating predictions for a batch of {len(claims_texts)} claims...")
         
         with torch.no_grad():
             outputs = self.model.generate(

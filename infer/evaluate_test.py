@@ -35,7 +35,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
     items = list(test_data.items())
     total_claims = len(items)
     
-    print(f"Starting Prediction on {total_claims} claims (Batch Size: {batch_size})...")
+    print(f"\nStarting Prediction on {total_claims} claims (Batch Size: {batch_size})...")
     
     for i in tqdm(range(0, total_claims, batch_size), desc="Predicting Batches", colour="green"):
         batch_items = items[i:i + batch_size]
@@ -54,7 +54,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
             batch_claim_texts.append(claim_text)
             batch_evidence_ids.append(evidence_ids)
             
-        model_outputs = verifier.predict(batch_claim_texts, batch_evidence_ids, few_shot=False)
+        model_outputs = verifier.predict(batch_claim_texts, batch_evidence_ids, few_shot=True if lora_path is None else False)
 
 
         for claim_id, claim_text, ev_ids, model_output in zip(batch_claim_ids, batch_claim_texts, batch_evidence_ids, model_outputs):
@@ -88,5 +88,5 @@ if __name__ == "__main__":
         lora_path=LORA_PATH,
         test_file_path=TEST_FILE,
         output_filepath=OUTPUT_FILE,
-        batch_size=12
+        batch_size=8
     )
