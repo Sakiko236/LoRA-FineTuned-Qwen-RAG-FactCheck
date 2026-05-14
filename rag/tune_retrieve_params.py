@@ -8,8 +8,8 @@ DATA_PATH = Path("data/dev-claims.json")
 
 # Search best parameters for evidence retrieval
 PARAM_GRID = {
-    "top_k_retrieve": [200],
-    "threshold":      [1.5, 2.0, 2.5, 3],
+    "top_k_retrieve": [5],
+    "threshold":      [2],
 }
 
 def compute_f1(retrieved_ids: list[str], gold_ids: list[str]) -> tuple[float, float, float]:

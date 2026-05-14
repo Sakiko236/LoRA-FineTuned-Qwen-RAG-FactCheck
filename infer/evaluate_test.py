@@ -47,7 +47,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
         for claim_id, claim_info in batch_items:
             claim_text = claim_info.get('claim_text', '')
             
-            top_evidence = rag.process_claim(claim_text, top_k_retrieve=20)
+            top_evidence = rag.process_claim(claim_text)
             evidence_ids = [ev['id'] for ev in top_evidence]
             
             batch_claim_ids.append(claim_id)

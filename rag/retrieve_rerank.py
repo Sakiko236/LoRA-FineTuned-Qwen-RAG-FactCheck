@@ -3,13 +3,12 @@ import json
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer, CrossEncoder
-from build_vector import MODEL_NAME
 
 DB_PATH = 'data/evidence.db'
 INDEX_PATH = 'data/faiss_index.bin'
 META_PATH = 'data/faiss_metadata.json'
 
-BI_ENCODER_NAME = MODEL_NAME
+BI_ENCODER_NAME = "BAAI/bge-base-en-v1.5"
 CROSS_ENCODER_NAME = 'ms-marco-MiniLM-L-6-v2'
 
 class RAGPipeline:
@@ -35,7 +34,7 @@ class RAGPipeline:
         result = cursor.fetchone()
         return result[0] if result else ""
 
-    def process_claim(self, claim_text, top_k_retrieve=200, threshold=2.0, max_results=5):
+    def process_claim(self, claim_text, top_k_retrieve=6, threshold=2.0, max_results=5):
         retrieved_candidates = {} 
 
         query_prompt = f"Represent this sentence for searching relevant passages: {claim_text}"
