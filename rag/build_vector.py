@@ -9,8 +9,8 @@ DB_PATH = 'data/evidence.db'
 INDEX_PATH = 'data/faiss_index.bin'
 META_PATH = 'data/faiss_metadata.json'
 
-MODEL_NAME = 'BAAI/bge-base-en-v1.5'
-BATCH_SIZE = 512
+MODEL_NAME = 'BAAI/bge-large-en-v1.5'
+BATCH_SIZE = 64
 
 def main():
     print(f"Loading Bi-Encoder model: {MODEL_NAME}...")

@@ -54,8 +54,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
             batch_claim_texts.append(claim_text)
             batch_evidence_ids.append(evidence_ids)
             
-        model_outputs = verifier.predict(batch_claim_texts, batch_evidence_ids, few_shot=True if lora_path is None else False)
-
+        model_outputs = verifier.predict(batch_claim_texts, batch_evidence_ids)
 
         for claim_id, claim_text, ev_ids, model_output in zip(batch_claim_ids, batch_claim_texts, batch_evidence_ids, model_outputs):
             predicted_label = extract_label(model_output)

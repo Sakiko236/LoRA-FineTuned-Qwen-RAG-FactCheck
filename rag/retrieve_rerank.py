@@ -8,7 +8,7 @@ DB_PATH = 'data/evidence.db'
 INDEX_PATH = 'data/faiss_index.bin'
 META_PATH = 'data/faiss_metadata.json'
 
-BI_ENCODER_NAME = "BAAI/bge-base-en-v1.5"
+BI_ENCODER_NAME = "BAAI/bge-large-en-v1.5"
 CROSS_ENCODER_NAME = 'ms-marco-MiniLM-L-6-v2'
 
 class RAGPipeline:

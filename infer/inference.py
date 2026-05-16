@@ -73,21 +73,11 @@ class ClaimVerifier:
         for claim_text, evidence_ids in zip(claims_texts, batch_evidence_ids):
             combined_evidence = self.fetch_evidence(claim_text, evidence_ids)
             
-            if few_shot:
-                messages = [
-                    {"role": "system", "content": """You are a climate science fact-checker. Your task is to explain the logical connection between the Evidence and the Claim to justify the Label. Use the format: "Let's analyze step by step: [Reasoning] Therefore, the conclusion is: [Label]." conclude your response with one of the following four labels: 
-                    [SUPPORTS, REFUTES, NOT_ENOUGH_INFO, DISPUTED]. Here are some examples:
-                    Evidence: 1. Reversals in polarity occurred around 1925, 1947, and 1977. 2. The PDO changed to a "cool" phase in a regime shift similar to the 1970s.
-                    Claim: In 1946, PDO switched to a cool phase.
-                    Let's analyze step by step: The evidence mentions a major PDO reversal occurring around 1947 and explicitly describes a shift to a "cool" phase. The year 1946 is immediately adjacent to the 1947 reversal date cited. Given the context of regime shifts, the evidence provides sufficient support for the timing and nature of the phase change described in the claim.
-                    Therefore, the conclusion is: SUPPORTS."""},
-                    {"role": "user", "content": f"Evidence:\n{combined_evidence}\n\nClaim:\n{claim_text}"}
-                ]
-            else:
-                messages = [
-                    {"role": "system", "content": "You are a climate science fact-checker. Your task is to explain the logical connection between the Evidence and the Claim to justify the Label."},
-                    {"role": "user", "content": f"Evidence:\n{combined_evidence}\n\nClaim:\n{claim_text}"}
-                ]
+            messages = [
+                {"role": "system", "content": """You are a climate science fact-checker. Your task is to explain the logical connection between the Evidence and the Claim to justify the Label. Use the format: "Let's analyze step by step: [Reasoning] Therefore, the conclusion is: [Label]." conclude your response with one of the following four labels: 
+                [SUPPORTS, REFUTES, NOT_ENOUGH_INFO, DISPUTED]."""},
+                {"role": "user", "content": f"Evidence:\n{combined_evidence}\n\nClaim:\n{claim_text}"}
+            ]
 
             prompt = self.tokenizer.apply_chat_template(
                 messages,
