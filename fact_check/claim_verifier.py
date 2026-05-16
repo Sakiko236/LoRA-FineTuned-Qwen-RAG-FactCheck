@@ -31,8 +31,7 @@ class ClaimVerifier:
             base_model_id,
             quantization_config=bnb_config,
             device_map="auto",
-            torch_dtype=compute_dtype,
-            attn_implementation="sdpa"
+            dtype=compute_dtype,
         )
 
         if lora_path and os.path.exists(lora_path):

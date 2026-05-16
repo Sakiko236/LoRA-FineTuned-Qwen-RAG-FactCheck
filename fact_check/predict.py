@@ -31,6 +31,7 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
         test_data = json.load(f)
         
     output_data = {}
+    raw_output_data = {}
     
     items = list(test_data.items())
     total_claims = len(items)
@@ -65,6 +66,12 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
                 "evidences": ev_ids
             }
             
+            raw_output_data[claim_id] = {
+                "claim_text": claim_text,
+                "raw_output": model_output,
+                "predicted_label": predicted_label
+            }
+            
     print(f"\nSaving predictions to {output_filepath}...")
     
     output_dir = os.path.dirname(output_filepath)
@@ -74,10 +81,15 @@ def generate_test_predictions_batched(base_model_id, lora_path, test_file_path, 
     with open(output_filepath, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=4, ensure_ascii=False)
         
-    print(f"✅ All Done! Results saved to {output_filepath}.")
+    raw_output_filepath = os.path.join(output_dir, "raw_output.json")
+    print(f"Saving raw outputs to {raw_output_filepath}...")
+    with open(raw_output_filepath, 'w', encoding='utf-8') as f:
+        json.dump(raw_output_data, f, indent=4, ensure_ascii=False)
+        
+    print(f"✅ All Done! Results saved to {output_filepath} and {raw_output_filepath}.")
 
 if __name__ == "__main__":
-    BASE_MODEL = "Qwen/Qwen3.5-4B"
+    BASE_MODEL = "Qwen/Qwen2.5-7B-Instruct"
     LORA_PATH = "model/qwen-cot-lora-final"
     TEST_FILE = "data/test-claims-unlabelled.json"
     OUTPUT_FILE = "fact_check/results/test-output.json" 
@@ -87,5 +99,5 @@ if __name__ == "__main__":
         lora_path=None,
         test_file_path=TEST_FILE,
         output_filepath=OUTPUT_FILE,
-        batch_size=4
+        batch_size=2
     )
