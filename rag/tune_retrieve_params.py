@@ -8,8 +8,8 @@ DATA_PATH = Path("data/dev-claims.json")
 
 # Search best parameters for evidence retrieval
 PARAM_GRID = {
-    "top_k_retrieve": [5],
-    "threshold":      [2],
+    "top_k_retrieve": [30],
+    "threshold":      [-10.0],
 }
 
 def compute_f1(retrieved_ids: list[str], gold_ids: list[str]) -> tuple[float, float, float]:
@@ -73,7 +73,8 @@ def main():
 
     # Initialize RAG Pipeline
     sys.path.insert(0, str(Path(__file__).parent))
-    from retrieve_rerank import RAGPipeline
+    # pyrefly: ignore [missing-import]
+    from rag_pipeline import RAGPipeline
 
     print("[INFO]Initializing RAGPipeline (loading models & index, may take a few minutes)")
     pipeline = RAGPipeline()

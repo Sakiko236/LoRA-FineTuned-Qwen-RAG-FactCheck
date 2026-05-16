@@ -6,7 +6,7 @@ from peft import PeftModel
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from rag.retrieve_rerank import RAGPipeline
+from rag.rag_pipeline import RAGPipeline
 from fine_tuning.retrieve_evidence import get_evidence_text
 
 class ClaimVerifier:

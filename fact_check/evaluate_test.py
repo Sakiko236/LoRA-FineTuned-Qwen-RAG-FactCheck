@@ -7,7 +7,7 @@ from tqdm import tqdm
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fact_check.claim_verifier import ClaimVerifier
-from rag.retrieve_rerank import RAGPipeline
+from rag.rag_pipeline import RAGPipeline
 
 def extract_label(text):
     text_upper = text.upper()

@@ -124,7 +124,7 @@ if __name__ == "__main__":
     LORA_PATH = "model/qwen-cot-lora-final" 
     
     DEV_FILE = "data/dev-claims.json"
-    OUTPUT_DIR = "infer/results"
+    OUTPUT_DIR = "fact_check/results"
     
     BATCH_SIZE = 8
     

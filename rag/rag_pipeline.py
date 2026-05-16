@@ -34,7 +34,7 @@ class RAGPipeline:
         result = cursor.fetchone()
         return result[0] if result else ""
 
-    def process_claim(self, claim_text, top_k_retrieve=6, threshold=1.5, max_results=5):
+    def process_claim(self, claim_text, top_k_retrieve=20, threshold=0.05, max_results=5):
         retrieved_candidates = {} 
 
         query_prompt = f"Represent this sentence for searching relevant passages: {claim_text}"
