@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from infer.claim_verifier import ClaimVerifier
+from fact_check.claim_verifier import ClaimVerifier
 from rag.retrieve_rerank import RAGPipeline
 
 def extract_label(text):
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     BASE_MODEL = "Qwen/Qwen3.5-4B"
     LORA_PATH = "model/qwen-cot-lora-final"
     TEST_FILE = "data/test-claims-unlabelled.json"
-    OUTPUT_FILE = "infer/results/test-output.json" 
+    OUTPUT_FILE = "fact_check/results/test-output.json" 
     
     generate_test_predictions_batched(
         base_model_id=BASE_MODEL,
