@@ -171,7 +171,7 @@ if __name__ == "__main__":
     
     evaluator = Evaluator(
         base_model=BASE_MODEL,
-        lora_path=LORA_PATH,
+        lora_path=None,
         groundtruth_path=GROUNDTRUTH_PATH,
         batch_size=BATCH_SIZE,
         save_raw_output=SAVE_RAW_OUTPUT,
