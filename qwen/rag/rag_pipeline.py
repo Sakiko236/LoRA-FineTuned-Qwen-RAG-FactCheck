@@ -4,9 +4,9 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer, CrossEncoder
 
-DB_PATH = 'data/evidence.db'
-INDEX_PATH = 'data/faiss_index.bin'
-META_PATH = 'data/faiss_metadata.json'
+DB_PATH = '../data/evidence.db'
+INDEX_PATH = '../data/faiss_index.bin'
+META_PATH = '../data/faiss_metadata.json'
 
 BI_ENCODER_NAME = "BAAI/bge-large-en-v1.5"
 CROSS_ENCODER_NAME = 'Qwen/Qwen3-Reranker-0.6B'

@@ -7,9 +7,9 @@ from tqdm import tqdm
 
 class FaissBuilder:
     def __init__(self, 
-                 db_path='data/evidence.db', 
-                 index_path='data/faiss_index.bin', 
-                 meta_path='data/faiss_metadata.json', 
+                 db_path='../data/evidence.db', 
+                 index_path='../data/faiss_index.bin', 
+                 meta_path='../data/faiss_metadata.json', 
                  model_name='BAAI/bge-large-en-v1.5', 
                  batch_size=64):
         self.db_path = db_path
