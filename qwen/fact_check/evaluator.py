@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fact_check.claim_verifier import ClaimVerifier
+from claim_verifier import ClaimVerifier
 from rag.rag_pipeline import RAGPipeline
 
 class Evaluator:
@@ -89,7 +89,7 @@ class Evaluator:
                 }
 
         if self.save_raw_output:
-            raw_output_filepath = "fact_check/results/raw_output_dev.json"
+            raw_output_filepath = "results/raw_output_dev.json"
             os.makedirs(os.path.dirname(raw_output_filepath), exist_ok=True)
             with open(raw_output_filepath, 'w', encoding='utf-8') as f:
                 json.dump(raw_outputs, f, indent=4, ensure_ascii=False)
@@ -162,8 +162,8 @@ class Evaluator:
 
 if __name__ == "__main__":
     BASE_MODEL = "Qwen/Qwen2.5-7B-Instruct"
-    LORA_PATH = "model/qwen-cot-lora-final"
-    GROUNDTRUTH_PATH = "data/dev-claims.json"
+    LORA_PATH = "../../model/qwen-cot-lora-final"
+    GROUNDTRUTH_PATH = "../../data/dev-claims.json"
     
     BATCH_SIZE = 2
     SAVE_RAW_OUTPUT = True

@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-def get_evidence_text(evidence_id, db_path='data/evidence.db'):
+def get_evidence_text(evidence_id, db_path='../../data/evidence.db'):
     if not os.path.exists(db_path):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         potential_db_path = os.path.join(script_dir, 'evidence.db')

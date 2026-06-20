@@ -6,7 +6,6 @@ datasets
 transformers
 peft
 torch
-sqlite3
 pandas
 huggingface_hub
 tqdm
@@ -14,3 +13,4 @@ dotenv
 accelerate
 sentencepiece
 bitsandbytes
+ijson

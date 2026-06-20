@@ -24,7 +24,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 
 print("Loading data from JSON...")
-with open('data/cot.json', 'r', encoding='utf-8') as f:
+with open('../../data/cot.json', 'r', encoding='utf-8') as f:
     cot_data = json.load(f)
 
 df = pd.DataFrame(list(cot_data.values()))
@@ -81,7 +81,7 @@ lora_config = LoraConfig(
 
 print("Starting Training...")
 training_args = SFTConfig(
-    output_dir="model/qwen-cot-lora",
+    output_dir="../../model/qwen-cot-lora",
     per_device_train_batch_size=2,      
     gradient_accumulation_steps=4,      
     learning_rate=2e-4,
@@ -107,7 +107,7 @@ trainer = SFTTrainer(
 
 trainer.train()
 
-output_dir = "model/qwen-cot-lora-final"
+output_dir = "../../model/qwen-cot-lora-final"
 trainer.model.save_pretrained(output_dir)
 tokenizer.save_pretrained(output_dir)
 print(f"Training complete! LoRA weights saved to {output_dir}")

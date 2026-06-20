@@ -5,4 +5,4 @@ data/faiss_index.bin
 data/faiss_metadata.json
 model/
 data/evidence.json
-
+lora-venv

@@ -43,7 +43,7 @@ model = AutoModelForCausalLM.from_pretrained(
 model.generation_config.max_length = None
 model.config.pad_token_id = tokenizer.pad_token_id
 
-JSON_PATH = "data/cot.json"
+JSON_PATH = "../../data/cot.json"
 
 def load_cot_json(json_path: str = JSON_PATH) -> dict:
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
@@ -161,7 +161,7 @@ cot_records = load_cot_json(OUT_PATH)
 done_ids = set(cot_records.keys())
 print(f"Resuming: {len(done_ids)} claims already in JSON.")
 
-with open('data/train-claims.json', 'r') as f:
+with open('../../data/train-claims.json', 'r') as f:
     train_data = json.load(f)
 
 all_claims_ready = []

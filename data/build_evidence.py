@@ -34,4 +34,4 @@ def build_evidence_db(json_path, db_path):
     conn.close()
     print("Database build complete!")
 
-build_evidence_db('data/evidence.json', 'db/evidence.db')
+build_evidence_db('evidence.json', 'evidence.db')
