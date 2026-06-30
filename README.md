@@ -1,4 +1,4 @@
-# LoRA-FineTuned Qwen RAG FactCheck
+# LLM RAG FactCheck
 
 This project implements a **Retrieval-Augmented Generation (RAG) pipeline combined with a LoRA fine-tuned Large Language Model (Qwen)** for factual verification and climate science fact-checking. 
 
